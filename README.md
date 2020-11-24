@@ -1,0 +1,1 @@
+# connectin-hasura-migrations
