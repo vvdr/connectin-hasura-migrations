@@ -1,6 +1,16 @@
-actions: []
+actions:
+- name: login
+  definition:
+    kind: synchronous
+    handler: '{{ACTION_BASE_URL}}/api/auth/login'
+- name: signup
+  definition:
+    kind: synchronous
+    handler: '{{ACTION_BASE_URL}}/api/auth/register'
 custom_types:
   enums: []
   input_objects: []
-  objects: []
+  objects:
+  - name: LoginOutput
+  - name: SignupOutput
   scalars: []
