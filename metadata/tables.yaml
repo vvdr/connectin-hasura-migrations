@@ -1,1 +1,46 @@
-[]
+- table:
+    schema: public
+    name: users
+  insert_permissions:
+  - role: anonymous
+    permission:
+      check: {}
+      columns:
+      - company_name
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+      - username
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - company_name
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+      - username
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      limit: 1
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - company_name
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+      - username
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
