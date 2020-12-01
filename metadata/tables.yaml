@@ -9,7 +9,7 @@
       - company_name
       - email
       - first_name
-      - id
+      - user_id
       - last_name
       - password
       - username
@@ -21,12 +21,12 @@
       - company_name
       - email
       - first_name
-      - id
+      - user_id
       - last_name
       - password
       - username
       filter:
-        id:
+        user_id:
           _eq: X-Hasura-User-Id
       limit: 1
   update_permissions:
@@ -36,11 +36,11 @@
       - company_name
       - email
       - first_name
-      - id
+      - user_id
       - last_name
       - password
       - username
       filter:
-        id:
+        user_id:
           _eq: X-Hasura-User-Id
       check: null
