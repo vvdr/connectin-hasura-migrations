@@ -93,7 +93,6 @@
       - phone_number
       - updated_at
       - user_id
-      - username
       backend_only: false
   select_permissions:
   - role: anonymous
@@ -110,7 +109,6 @@
       - phone_number
       - updated_at
       - user_id
-      - username
       filter: {}
   - role: user
     permission:
@@ -126,7 +124,6 @@
       - phone_number
       - updated_at
       - user_id
-      - username
       filter:
         user_id:
           _eq: X-Hasura-User-Id
@@ -146,7 +143,6 @@
       - phone_number
       - updated_at
       - user_id
-      - username
       filter:
         user_id:
           _eq: X-Hasura-User-Id
