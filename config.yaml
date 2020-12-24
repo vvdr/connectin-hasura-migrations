@@ -1,5 +1,5 @@
 version: 2
-endpoint: https://connectin-hasura-backend.herokuapp.com
+endpoint: https://connectin-hasura-backend-stag.herokuapp.com
 metadata_directory: metadata
 actions:
   kind: synchronous
