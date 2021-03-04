@@ -21,7 +21,7 @@
       - notes_what_is_common
       - notes_advice_wanted
       - frequency
-      - start_date
+      - next_reminder_date
       - user_id
       - phone_number
       backend_only: false
@@ -39,7 +39,7 @@
       - notes_what_is_common
       - phone_number
       - created_at
-      - start_date
+      - next_reminder_date
       - updated_at
       - connect_id
       - user_id
@@ -60,7 +60,7 @@
       - notes_what_is_common
       - phone_number
       - created_at
-      - start_date
+      - next_reminder_date
       - updated_at
       - connect_id
       - user_id
@@ -77,39 +77,7 @@
 - table:
     schema: public
     name: users
-  insert_permissions:
-  - role: anonymous
-    permission:
-      check: {}
-      columns:
-      - company_name
-      - created_at
-      - email
-      - first_name
-      - last_logged_on
-      - last_name
-      - password
-      - password_updated_on
-      - phone_number
-      - updated_at
-      - user_id
-      backend_only: false
   select_permissions:
-  - role: anonymous
-    permission:
-      columns:
-      - company_name
-      - created_at
-      - email
-      - first_name
-      - last_logged_on
-      - last_name
-      - password
-      - password_updated_on
-      - phone_number
-      - updated_at
-      - user_id
-      filter: {}
   - role: user
     permission:
       columns:
@@ -117,6 +85,8 @@
       - created_at
       - email
       - first_name
+      - invite_code
+      - invited_by
       - last_logged_on
       - last_name
       - password
@@ -136,6 +106,8 @@
       - created_at
       - email
       - first_name
+      - invite_code
+      - invited_by
       - last_logged_on
       - last_name
       - password
