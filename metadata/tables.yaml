@@ -1,8 +1,5 @@
 - table:
     schema: public
-    name: addresses
-- table:
-    schema: public
     name: connects
   object_relationships:
   - name: user
