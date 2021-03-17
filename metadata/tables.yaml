@@ -1,5 +1,8 @@
 - table:
     schema: public
+    name: addresses
+- table:
+    schema: public
     name: connects
   object_relationships:
   - name: user
@@ -76,24 +79,40 @@
           _eq: X-Hasura-User-Id
 - table:
     schema: public
+    name: gender
+  is_enum: true
+- table:
+    schema: public
+    name: race
+  is_enum: true
+- table:
+    schema: public
     name: users
   select_permissions:
   - role: user
     permission:
       columns:
-      - company_name
-      - created_at
+      - user_id
       - email
       - first_name
-      - invite_code
-      - invited_by
-      - last_logged_on
       - last_name
+      - company_name
       - password
+      - created_at
+      - updated_at
+      - last_logged_on
       - password_updated_on
       - phone_number
-      - updated_at
-      - user_id
+      - invite_code
+      - invited_by
+      - gender
+      - birth_year
+      - race
+      - city
+      - state
+      - country
+      - job_title
+      - department
       filter:
         user_id:
           _eq: X-Hasura-User-Id
@@ -102,17 +121,25 @@
   - role: user
     permission:
       columns:
+      - birth_year
+      - city
       - company_name
+      - country
       - created_at
+      - department
       - email
       - first_name
+      - gender
       - invite_code
       - invited_by
+      - job_title
       - last_logged_on
       - last_name
       - password
       - password_updated_on
       - phone_number
+      - race
+      - state
       - updated_at
       - user_id
       filter:
