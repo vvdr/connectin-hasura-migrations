@@ -80,40 +80,203 @@
   is_enum: true
 - table:
     schema: public
-    name: race
-  is_enum: true
+    name: matched_users
 - table:
     schema: public
-    name: users
+    name: org_users
+  object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: org_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  insert_permissions:
+  - role: user
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+      - org_user_id
+      - org_id
+      - user_id
+      - created_at
+      - updated_at
+      backend_only: false
   select_permissions:
   - role: user
     permission:
       columns:
-      - user_id
-      - email
-      - first_name
-      - last_name
-      - company_name
-      - password
       - created_at
       - updated_at
-      - last_logged_on
-      - password_updated_on
-      - phone_number
+      - org_id
+      - org_user_id
+      - user_id
+      filter: {}
+      allow_aggregations: true
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - created_at
+      - updated_at
+      - org_id
+      - org_user_id
+      - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      check: null
+  delete_permissions:
+  - role: user
+    permission:
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+- table:
+    schema: public
+    name: organizations
+  object_relationships:
+  - name: roulette_frequency
+    using:
+      foreign_key_constraint_on: rf_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  array_relationships:
+  - name: org_users
+    using:
+      foreign_key_constraint_on:
+        column: org_id
+        table:
+          schema: public
+          name: org_users
+  insert_permissions:
+  - role: user
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+      - created_at
+      - name
+      - org_code
+      - org_id
+      - rf_id
+      - status
+      - updated_at
+      - user_id
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - created_at
+      - name
+      - org_code
+      - org_id
+      - rf_id
+      - status
+      - updated_at
+      - user_id
+      filter: {}
+      allow_aggregations: true
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - created_at
+      - name
+      - org_code
+      - org_id
+      - rf_id
+      - status
+      - updated_at
+      - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      check: null
+- table:
+    schema: public
+    name: race
+  is_enum: true
+- table:
+    schema: public
+    name: roulette_frequency
+  array_relationships:
+  - name: organizations
+    using:
+      foreign_key_constraint_on:
+        column: rf_id
+        table:
+          schema: public
+          name: organizations
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - dates
+      - name
+      - rf_id
+      filter: {}
+- table:
+    schema: public
+    name: users
+  array_relationships:
+  - name: connects
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: connects
+  - name: joined_orgs
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: org_users
+  - name: organizations
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: organizations
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - birth_year
+      - city
+      - company_name
+      - country
+      - created_at
+      - department
+      - email
+      - first_name
+      - gender
       - invite_code
       - invited_by
-      - gender
-      - birth_year
-      - race
-      - city
-      - state
-      - country
       - job_title
-      - department
+      - last_logged_on
+      - last_name
+      - password
+      - password_updated_on
+      - phone_number
+      - race
+      - roulette_optin
+      - state
+      - updated_at
+      - user_id
       filter:
         user_id:
           _eq: X-Hasura-User-Id
       limit: 1
+      allow_aggregations: true
   update_permissions:
   - role: user
     permission:
