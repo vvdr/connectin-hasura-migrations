@@ -81,6 +81,10 @@
 - table:
     schema: public
     name: matched_users
+  object_relationships:
+  - name: organization
+    using:
+      foreign_key_constraint_on: org_id
 - table:
     schema: public
     name: org_users
