@@ -166,20 +166,22 @@
         user_id:
           _eq: X-Hasura-User-Id
       columns:
-      - org_user_id
-      - org_id
-      - user_id
       - created_at
+      - org_id
+      - org_user_id
+      - status
       - updated_at
+      - user_id
       backend_only: false
   select_permissions:
   - role: user
     permission:
       columns:
       - created_at
-      - updated_at
       - org_id
       - org_user_id
+      - status
+      - updated_at
       - user_id
       filter: {}
       allow_aggregations: true
@@ -188,20 +190,29 @@
     permission:
       columns:
       - created_at
-      - updated_at
       - org_id
       - org_user_id
+      - status
+      - updated_at
       - user_id
       filter:
-        user_id:
-          _eq: X-Hasura-User-Id
+        _or:
+        - org_id:
+            _eq: X-Hasura-User-Id
+        - organization:
+            user_id:
+              _eq: X-Hasura-User-Id
       check: null
   delete_permissions:
   - role: user
     permission:
       filter:
-        user_id:
-          _eq: X-Hasura-User-Id
+        _or:
+        - org_id:
+            _eq: X-Hasura-User-Id
+        - organization:
+            user_id:
+              _eq: X-Hasura-User-Id
 - table:
     schema: public
     name: organizations
