@@ -1,13 +1,12 @@
 type Mutation {
-  login (
+  login(
     email: String!
     password: String!
   ): LoginOutput
 }
 
-
 type Mutation {
-  signup (
+  signup(
     first_name: String!
     last_name: String!
     email: String!
@@ -16,16 +15,13 @@ type Mutation {
   ): SignupOutput
 }
 
-
-
-
 type LoginOutput {
-  id : String!
-  token : String!
+  id: String!
+  token: String!
 }
 
 type SignupOutput {
-  id : String!
-  token : String!
+  id: String!
+  token: String!
 }
 
