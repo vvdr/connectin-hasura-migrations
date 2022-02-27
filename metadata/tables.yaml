@@ -238,10 +238,12 @@
         user_id:
           _eq: X-Hasura-User-Id
       columns:
+      - calendar_integration
       - created_at
       - name
       - org_code
       - org_id
+      - restricted
       - rf_id
       - status
       - updated_at
@@ -251,10 +253,12 @@
   - role: user
     permission:
       columns:
+      - calendar_integration
       - created_at
       - name
       - org_code
       - org_id
+      - restricted
       - rf_id
       - status
       - updated_at
@@ -265,10 +269,12 @@
   - role: user
     permission:
       columns:
+      - calendar_integration
       - created_at
       - name
       - org_code
       - org_id
+      - restricted
       - rf_id
       - status
       - updated_at
