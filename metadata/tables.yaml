@@ -238,30 +238,34 @@
         user_id:
           _eq: X-Hasura-User-Id
       columns:
-      - calendar_integration
-      - created_at
       - name
-      - org_code
       - org_id
-      - restricted
-      - rf_id
-      - status
+      - created_at
       - updated_at
       - user_id
+      - org_code
+      - rf_id
+      - status
+      - calendar_integration
+      - restricted
+      - allowed_extensions
+      - additional_admins
       backend_only: false
   select_permissions:
   - role: user
     permission:
       columns:
       - calendar_integration
-      - created_at
+      - restricted
+      - additional_admins
+      - allowed_extensions
       - name
       - org_code
-      - org_id
-      - restricted
       - rf_id
       - status
+      - created_at
       - updated_at
+      - org_id
       - user_id
       filter: {}
       allow_aggregations: true
@@ -270,14 +274,16 @@
     permission:
       columns:
       - calendar_integration
-      - created_at
+      - restricted
+      - additional_admins
+      - allowed_extensions
       - name
       - org_code
-      - org_id
-      - restricted
       - rf_id
       - status
+      - created_at
       - updated_at
+      - org_id
       - user_id
       filter:
         user_id:
