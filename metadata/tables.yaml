@@ -162,26 +162,28 @@
   insert_permissions:
   - role: user
     permission:
-      check:
-        user_id:
-          _eq: X-Hasura-User-Id
+      check: {}
       columns:
-      - created_at
-      - org_id
       - org_user_id
-      - status
-      - updated_at
+      - org_id
       - user_id
+      - created_at
+      - updated_at
+      - status
+      - water_cooler
+      - water_cooler_topics
       backend_only: false
   select_permissions:
   - role: user
     permission:
       columns:
+      - water_cooler
+      - water_cooler_topics
+      - status
       - created_at
+      - updated_at
       - org_id
       - org_user_id
-      - status
-      - updated_at
       - user_id
       filter: {}
       allow_aggregations: true
@@ -189,30 +191,20 @@
   - role: user
     permission:
       columns:
+      - water_cooler
+      - water_cooler_topics
+      - status
       - created_at
+      - updated_at
       - org_id
       - org_user_id
-      - status
-      - updated_at
       - user_id
-      filter:
-        _or:
-        - org_id:
-            _eq: X-Hasura-User-Id
-        - organization:
-            user_id:
-              _eq: X-Hasura-User-Id
+      filter: {}
       check: null
   delete_permissions:
   - role: user
     permission:
-      filter:
-        _or:
-        - org_id:
-            _eq: X-Hasura-User-Id
-        - organization:
-            user_id:
-              _eq: X-Hasura-User-Id
+      filter: {}
 - table:
     schema: public
     name: organizations
@@ -250,6 +242,10 @@
       - restricted
       - allowed_extensions
       - additional_admins
+      - water_cooler
+      - water_cooler_time
+      - water_cooler_days
+      - water_cooler_topics
       backend_only: false
   select_permissions:
   - role: user
@@ -257,14 +253,18 @@
       columns:
       - calendar_integration
       - restricted
+      - water_cooler
       - additional_admins
       - allowed_extensions
+      - water_cooler_days
+      - water_cooler_topics
       - name
       - org_code
       - rf_id
       - status
       - created_at
       - updated_at
+      - water_cooler_time
       - org_id
       - user_id
       filter: {}
@@ -275,14 +275,18 @@
       columns:
       - calendar_integration
       - restricted
+      - water_cooler
       - additional_admins
       - allowed_extensions
+      - water_cooler_days
+      - water_cooler_topics
       - name
       - org_code
       - rf_id
       - status
       - created_at
       - updated_at
+      - water_cooler_time
       - org_id
       - user_id
       filter:
@@ -337,63 +341,120 @@
         table:
           schema: public
           name: organizations
-  select_permissions:
+  insert_permissions:
   - role: user
     permission:
+      check: {}
       columns:
+      - roulette_optin
       - birth_year
+      - water_cooler_topics
+      - auth_provider
       - city
       - company_name
       - country
-      - created_at
       - department
       - email
       - first_name
       - gender
       - invite_code
-      - invited_by
       - job_title
-      - last_logged_on
       - last_name
       - password
-      - password_updated_on
       - phone_number
       - race
-      - roulette_optin
       - state
+      - created_at
+      - last_logged_on
+      - password_updated_on
       - updated_at
+      - invited_by
       - user_id
-      filter:
-        user_id:
-          _eq: X-Hasura-User-Id
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - user_id
+      - email
+      - first_name
+      - last_name
+      - company_name
+      - password
+      - created_at
+      - updated_at
+      - last_logged_on
+      - password_updated_on
+      - phone_number
+      - invite_code
+      - invited_by
+      - gender
+      - birth_year
+      - race
+      - city
+      - state
+      - country
+      - job_title
+      - department
+      - roulette_optin
+      - auth_provider
+      - water_cooler_topics
+      filter: {}
       limit: 1
       allow_aggregations: true
   update_permissions:
   - role: user
     permission:
       columns:
+      - roulette_optin
       - birth_year
+      - water_cooler_topics
+      - auth_provider
       - city
       - company_name
       - country
-      - created_at
       - department
       - email
       - first_name
       - gender
       - invite_code
-      - invited_by
       - job_title
-      - last_logged_on
       - last_name
       - password
-      - password_updated_on
       - phone_number
       - race
       - state
+      - created_at
+      - last_logged_on
+      - password_updated_on
       - updated_at
+      - invited_by
       - user_id
       filter:
         user_id:
           _eq: X-Hasura-User-Id
       check: null
+- table:
+    schema: public
+    name: water_cooler_users_hash
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - org_id
+      - value
+      - created_at
+      - updated_at
+      - id
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - id
+      - value
+      - created_at
+      - updated_at
+      - org_id
+      filter: {}
