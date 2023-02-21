@@ -2,78 +2,106 @@
     schema: public
     name: connects
   object_relationships:
-  - name: user
-    using:
-      foreign_key_constraint_on: user_id
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
   insert_permissions:
-  - role: user
-    permission:
-      check: {}
-      columns:
-      - connect_id
-      - first_name
-      - last_name
-      - email
-      - company_name
-      - created_at
-      - updated_at
-      - notes_about_them
-      - notes_what_is_common
-      - notes_advice_wanted
-      - frequency
-      - next_reminder_date
-      - user_id
-      - phone_number
-      backend_only: false
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - connect_id
+          - first_name
+          - last_name
+          - email
+          - company_name
+          - created_at
+          - updated_at
+          - notes_about_them
+          - notes_what_is_common
+          - notes_advice_wanted
+          - frequency
+          - next_reminder_date
+          - user_id
+          - phone_number
+        backend_only: false
   select_permissions:
-  - role: user
-    permission:
-      columns:
-      - company_name
-      - frequency
-      - email
-      - first_name
-      - last_name
-      - notes_about_them
-      - notes_advice_wanted
-      - notes_what_is_common
-      - phone_number
-      - created_at
-      - next_reminder_date
-      - updated_at
-      - connect_id
-      - user_id
-      filter:
-        user_id:
-          _eq: X-Hasura-User-Id
+    - role: user
+      permission:
+        columns:
+          - company_name
+          - frequency
+          - email
+          - first_name
+          - last_name
+          - notes_about_them
+          - notes_advice_wanted
+          - notes_what_is_common
+          - phone_number
+          - created_at
+          - next_reminder_date
+          - updated_at
+          - connect_id
+          - user_id
+        filter:
+          user_id:
+            _eq: X-Hasura-User-Id
   update_permissions:
-  - role: user
-    permission:
-      columns:
-      - company_name
-      - frequency
-      - email
-      - first_name
-      - last_name
-      - notes_about_them
-      - notes_advice_wanted
-      - notes_what_is_common
-      - phone_number
-      - created_at
-      - next_reminder_date
-      - updated_at
-      - connect_id
-      - user_id
-      filter:
-        user_id:
-          _eq: X-Hasura-User-Id
-      check: null
+    - role: user
+      permission:
+        columns:
+          - company_name
+          - frequency
+          - email
+          - first_name
+          - last_name
+          - notes_about_them
+          - notes_advice_wanted
+          - notes_what_is_common
+          - phone_number
+          - created_at
+          - next_reminder_date
+          - updated_at
+          - connect_id
+          - user_id
+        filter:
+          user_id:
+            _eq: X-Hasura-User-Id
+        check: null
   delete_permissions:
-  - role: user
-    permission:
-      filter:
-        user_id:
-          _eq: X-Hasura-User-Id
+    - role: user
+      permission:
+        filter:
+          user_id:
+            _eq: X-Hasura-User-Id
+- table:
+    schema: public
+    name: email_logs
+  insert_permissions:
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - user_email
+          - meeting_link
+          - partners
+          - created_at
+          - updated_at
+          - id
+          - roulette_type
+        backend_only: false
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - partners
+          - meeting_link
+          - roulette_type
+          - user_email
+          - created_at
+          - updated_at
+          - id
+        filter: {}
 - table:
     schema: public
     name: gender
@@ -82,217 +110,273 @@
     schema: public
     name: matched_users
   object_relationships:
-  - name: organization
-    using:
-      foreign_key_constraint_on: org_id
+    - name: organization
+      using:
+        foreign_key_constraint_on: org_id
+  insert_permissions:
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - match_id
+          - user1
+          - user2
+          - match_date
+          - created_at
+          - updated_at
+          - org_id
+        backend_only: false
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - match_id
+          - user1
+          - user2
+          - match_date
+          - created_at
+          - updated_at
+          - org_id
+        filter: {}
+  update_permissions:
+    - role: user
+      permission:
+        columns:
+          - match_date
+          - created_at
+          - updated_at
+          - match_id
+          - org_id
+          - user1
+          - user2
+        filter: {}
+        check: null
+  delete_permissions:
+    - role: user
+      permission:
+        filter: {}
 - table:
     schema: public
     name: meets
   object_relationships:
-  - name: connect
-    using:
-      foreign_key_constraint_on: connect_id
+    - name: connect
+      using:
+        foreign_key_constraint_on: connect_id
   insert_permissions:
-  - role: user
-    permission:
-      check:
-        connect:
-          user_id:
-            _eq: X-Hasura-User-Id
-      columns:
-      - meet_id
-      - created_at
-      - updated_at
-      - connect_id
-      - notes
-      - meet_date
-      - location
-      - follow_up_note
-      backend_only: false
+    - role: user
+      permission:
+        check:
+          connect:
+            user_id:
+              _eq: X-Hasura-User-Id
+        columns:
+          - meet_id
+          - created_at
+          - updated_at
+          - connect_id
+          - notes
+          - meet_date
+          - location
+          - follow_up_note
+        backend_only: false
   select_permissions:
-  - role: user
-    permission:
-      columns:
-      - follow_up_note
-      - location
-      - notes
-      - meet_date
-      - created_at
-      - updated_at
-      - connect_id
-      - meet_id
-      filter:
-        connect:
-          user_id:
-            _eq: X-Hasura-User-Id
+    - role: user
+      permission:
+        columns:
+          - follow_up_note
+          - location
+          - notes
+          - meet_date
+          - created_at
+          - updated_at
+          - connect_id
+          - meet_id
+        filter:
+          connect:
+            user_id:
+              _eq: X-Hasura-User-Id
   update_permissions:
-  - role: user
-    permission:
-      columns:
-      - follow_up_note
-      - location
-      - notes
-      - meet_date
-      - created_at
-      - updated_at
-      - connect_id
-      - meet_id
-      filter:
-        connect:
-          user_id:
-            _eq: X-Hasura-User-Id
-      check: null
+    - role: user
+      permission:
+        columns:
+          - follow_up_note
+          - location
+          - notes
+          - meet_date
+          - created_at
+          - updated_at
+          - connect_id
+          - meet_id
+        filter:
+          connect:
+            user_id:
+              _eq: X-Hasura-User-Id
+        check: null
   delete_permissions:
-  - role: user
-    permission:
-      filter:
-        connect:
-          user_id:
-            _eq: X-Hasura-User-Id
+    - role: user
+      permission:
+        filter:
+          connect:
+            user_id:
+              _eq: X-Hasura-User-Id
 - table:
     schema: public
     name: org_users
   object_relationships:
-  - name: organization
-    using:
-      foreign_key_constraint_on: org_id
-  - name: user
-    using:
-      foreign_key_constraint_on: user_id
+    - name: organization
+      using:
+        foreign_key_constraint_on: org_id
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
   insert_permissions:
-  - role: user
-    permission:
-      check: {}
-      columns:
-      - org_user_id
-      - org_id
-      - user_id
-      - created_at
-      - updated_at
-      - status
-      - water_cooler
-      - water_cooler_topics
-      backend_only: false
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - org_user_id
+          - org_id
+          - user_id
+          - created_at
+          - updated_at
+          - status
+          - water_cooler
+          - water_cooler_topics
+        backend_only: false
   select_permissions:
-  - role: user
-    permission:
-      columns:
-      - water_cooler
-      - water_cooler_topics
-      - status
-      - created_at
-      - updated_at
-      - org_id
-      - org_user_id
-      - user_id
-      filter: {}
-      allow_aggregations: true
+    - role: user
+      permission:
+        columns:
+          - water_cooler
+          - water_cooler_topics
+          - status
+          - created_at
+          - updated_at
+          - org_id
+          - org_user_id
+          - user_id
+        filter: {}
+        allow_aggregations: true
   update_permissions:
-  - role: user
-    permission:
-      columns:
-      - water_cooler
-      - water_cooler_topics
-      - status
-      - created_at
-      - updated_at
-      - org_id
-      - org_user_id
-      - user_id
-      filter: {}
-      check: null
+    - role: user
+      permission:
+        columns:
+          - water_cooler
+          - water_cooler_topics
+          - status
+          - created_at
+          - updated_at
+          - org_id
+          - org_user_id
+          - user_id
+        filter: {}
+        check: null
   delete_permissions:
-  - role: user
-    permission:
-      filter: {}
+    - role: user
+      permission:
+        filter: {}
 - table:
     schema: public
     name: organizations
   object_relationships:
-  - name: roulette_frequency
-    using:
-      foreign_key_constraint_on: rf_id
-  - name: user
-    using:
-      foreign_key_constraint_on: user_id
+    - name: roulette_frequency
+      using:
+        foreign_key_constraint_on: rf_id
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
   array_relationships:
-  - name: org_users
-    using:
-      foreign_key_constraint_on:
-        column: org_id
-        table:
-          schema: public
-          name: org_users
+    - name: org_users
+      using:
+        foreign_key_constraint_on:
+          column: org_id
+          table:
+            schema: public
+            name: org_users
   insert_permissions:
-  - role: user
-    permission:
-      check:
-        user_id:
-          _eq: X-Hasura-User-Id
-      columns:
-      - name
-      - org_id
-      - created_at
-      - updated_at
-      - user_id
-      - org_code
-      - rf_id
-      - status
-      - calendar_integration
-      - restricted
-      - allowed_extensions
-      - additional_admins
-      - water_cooler
-      - water_cooler_time
-      - water_cooler_days
-      - water_cooler_topics
-      backend_only: false
+    - role: user
+      permission:
+        check:
+          user_id:
+            _eq: X-Hasura-User-Id
+        columns:
+          - additional_admins
+          - allowed_extensions
+          - calendar_integration
+          - created_at
+          - name
+          - org_code
+          - org_id
+          - restricted
+          - rf_id
+          - roulette_day
+          - roulette_time
+          - roulette_timezone
+          - status
+          - updated_at
+          - user_id
+          - water_cooler
+          - water_cooler_days
+          - water_cooler_time
+          - water_cooler_timezone
+          - water_cooler_topics
+        backend_only: false
   select_permissions:
-  - role: user
-    permission:
-      columns:
-      - calendar_integration
-      - restricted
-      - water_cooler
-      - additional_admins
-      - allowed_extensions
-      - water_cooler_days
-      - water_cooler_topics
-      - name
-      - org_code
-      - rf_id
-      - status
-      - created_at
-      - updated_at
-      - water_cooler_time
-      - org_id
-      - user_id
-      filter: {}
-      allow_aggregations: true
+    - role: user
+      permission:
+        columns:
+          - additional_admins
+          - allowed_extensions
+          - calendar_integration
+          - created_at
+          - name
+          - org_code
+          - org_id
+          - restricted
+          - rf_id
+          - roulette_day
+          - roulette_time
+          - roulette_timezone
+          - status
+          - updated_at
+          - user_id
+          - water_cooler
+          - water_cooler_days
+          - water_cooler_time
+          - water_cooler_timezone
+          - water_cooler_topics
+        filter: {}
+        allow_aggregations: true
   update_permissions:
-  - role: user
-    permission:
-      columns:
-      - calendar_integration
-      - restricted
-      - water_cooler
-      - additional_admins
-      - allowed_extensions
-      - water_cooler_days
-      - water_cooler_topics
-      - name
-      - org_code
-      - rf_id
-      - status
-      - created_at
-      - updated_at
-      - water_cooler_time
-      - org_id
-      - user_id
-      filter:
-        user_id:
-          _eq: X-Hasura-User-Id
-      check: null
+    - role: user
+      permission:
+        columns:
+          - additional_admins
+          - allowed_extensions
+          - calendar_integration
+          - created_at
+          - name
+          - org_code
+          - org_id
+          - restricted
+          - rf_id
+          - roulette_day
+          - roulette_time
+          - roulette_timezone
+          - status
+          - updated_at
+          - user_id
+          - water_cooler
+          - water_cooler_days
+          - water_cooler_time
+          - water_cooler_timezone
+          - water_cooler_topics
+        filter: {}
+        check: null
+  delete_permissions:
+    - role: user
+      permission:
+        filter: {}
 - table:
     schema: public
     name: race
@@ -301,160 +385,178 @@
     schema: public
     name: roulette_frequency
   array_relationships:
-  - name: organizations
-    using:
-      foreign_key_constraint_on:
-        column: rf_id
-        table:
-          schema: public
-          name: organizations
+    - name: organizations
+      using:
+        foreign_key_constraint_on:
+          column: rf_id
+          table:
+            schema: public
+            name: organizations
   select_permissions:
-  - role: user
-    permission:
-      columns:
-      - dates
-      - name
-      - rf_id
-      filter: {}
+    - role: user
+      permission:
+        columns:
+          - dates
+          - name
+          - rf_id
+        filter: {}
 - table:
     schema: public
     name: users
   array_relationships:
-  - name: connects
-    using:
-      foreign_key_constraint_on:
-        column: user_id
-        table:
-          schema: public
-          name: connects
-  - name: joined_orgs
-    using:
-      foreign_key_constraint_on:
-        column: user_id
-        table:
-          schema: public
-          name: org_users
-  - name: organizations
-    using:
-      foreign_key_constraint_on:
-        column: user_id
-        table:
-          schema: public
-          name: organizations
+    - name: connects
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            schema: public
+            name: connects
+    - name: joined_orgs
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            schema: public
+            name: org_users
+    - name: organizations
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            schema: public
+            name: organizations
   insert_permissions:
-  - role: user
-    permission:
-      check: {}
-      columns:
-      - roulette_optin
-      - birth_year
-      - water_cooler_topics
-      - auth_provider
-      - city
-      - company_name
-      - country
-      - department
-      - email
-      - first_name
-      - gender
-      - invite_code
-      - job_title
-      - last_name
-      - password
-      - phone_number
-      - race
-      - state
-      - created_at
-      - last_logged_on
-      - password_updated_on
-      - updated_at
-      - invited_by
-      - user_id
-      backend_only: false
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - user_id
+          - email
+          - first_name
+          - last_name
+          - company_name
+          - password
+          - created_at
+          - updated_at
+          - last_logged_on
+          - password_updated_on
+          - phone_number
+          - invite_code
+          - invited_by
+          - gender
+          - birth_year
+          - race
+          - city
+          - state
+          - country
+          - job_title
+          - department
+          - roulette_optin
+          - auth_provider
+          - water_cooler_topics
+          - prefer_way_of_contact
+          - prefer_day_and_time
+          - linkedin_link
+          - youtube_link
+          - website_link
+          - instagram_link
+        backend_only: false
   select_permissions:
-  - role: user
-    permission:
-      columns:
-      - user_id
-      - email
-      - first_name
-      - last_name
-      - company_name
-      - password
-      - created_at
-      - updated_at
-      - last_logged_on
-      - password_updated_on
-      - phone_number
-      - invite_code
-      - invited_by
-      - gender
-      - birth_year
-      - race
-      - city
-      - state
-      - country
-      - job_title
-      - department
-      - roulette_optin
-      - auth_provider
-      - water_cooler_topics
-      filter: {}
-      limit: 1
-      allow_aggregations: true
+    - role: user
+      permission:
+        columns:
+          - roulette_optin
+          - birth_year
+          - water_cooler_topics
+          - auth_provider
+          - city
+          - company_name
+          - country
+          - department
+          - email
+          - first_name
+          - gender
+          - instagram_link
+          - invite_code
+          - job_title
+          - last_name
+          - linkedin_link
+          - password
+          - phone_number
+          - prefer_day_and_time
+          - prefer_way_of_contact
+          - race
+          - state
+          - website_link
+          - youtube_link
+          - created_at
+          - last_logged_on
+          - password_updated_on
+          - updated_at
+          - invited_by
+          - user_id
+        filter: {}
+        limit: 1
+        allow_aggregations: true
   update_permissions:
-  - role: user
-    permission:
-      columns:
-      - roulette_optin
-      - birth_year
-      - water_cooler_topics
-      - auth_provider
-      - city
-      - company_name
-      - country
-      - department
-      - email
-      - first_name
-      - gender
-      - invite_code
-      - job_title
-      - last_name
-      - password
-      - phone_number
-      - race
-      - state
-      - created_at
-      - last_logged_on
-      - password_updated_on
-      - updated_at
-      - invited_by
-      - user_id
-      filter:
-        user_id:
-          _eq: X-Hasura-User-Id
-      check: null
+    - role: user
+      permission:
+        columns:
+          - roulette_optin
+          - birth_year
+          - water_cooler_topics
+          - auth_provider
+          - city
+          - company_name
+          - country
+          - department
+          - email
+          - first_name
+          - gender
+          - instagram_link
+          - invite_code
+          - job_title
+          - last_name
+          - linkedin_link
+          - password
+          - phone_number
+          - prefer_day_and_time
+          - prefer_way_of_contact
+          - race
+          - state
+          - website_link
+          - youtube_link
+          - created_at
+          - last_logged_on
+          - password_updated_on
+          - updated_at
+          - invited_by
+          - user_id
+        filter:
+          user_id:
+            _eq: X-Hasura-User-Id
+        check: null
 - table:
     schema: public
     name: water_cooler_users_hash
   insert_permissions:
-  - role: user
-    permission:
-      check: {}
-      columns:
-      - org_id
-      - value
-      - created_at
-      - updated_at
-      - id
-      backend_only: false
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - created_at
+          - hashlist
+          - id
+          - org_id
+          - updated_at
+        backend_only: false
   select_permissions:
-  - role: user
-    permission:
-      columns:
-      - id
-      - value
-      - created_at
-      - updated_at
-      - org_id
-      filter: {}
+    - role: user
+      permission:
+        columns:
+          - created_at
+          - hashlist
+          - id
+          - org_id
+          - updated_at
+        filter: {}
