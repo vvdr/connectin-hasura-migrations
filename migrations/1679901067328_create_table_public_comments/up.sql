@@ -1,0 +1,2 @@
+CREATE TABLE "public"."comments" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "content" text NOT NULL, "created_at" timestamptz NOT NULL DEFAULT now(), "user_id" uuid NOT NULL, "post_id" uuid NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("user_id") REFERENCES "public"."users"("user_id") ON UPDATE restrict ON DELETE restrict, FOREIGN KEY ("post_id") REFERENCES "public"."posts"("id") ON UPDATE restrict ON DELETE restrict);COMMENT ON TABLE "public"."comments" IS E'comments';
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

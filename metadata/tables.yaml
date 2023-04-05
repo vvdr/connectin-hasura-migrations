@@ -1,10 +1,31 @@
 - table:
+    name: comments
     schema: public
+  object_relationships:
+    - name: user
+      using:
+        manual_configuration:
+          column_mapping:
+            user_id: user_id
+          insertion_order: null
+          remote_table:
+            name: users
+            schema: public
+- table:
     name: connects
+    schema: public
   object_relationships:
     - name: user
       using:
         foreign_key_constraint_on: user_id
+  array_relationships:
+    - name: meets
+      using:
+        foreign_key_constraint_on:
+          column: connect_id
+          table:
+            name: meets
+            schema: public
   insert_permissions:
     - role: user
       permission:
@@ -24,7 +45,6 @@
           - next_reminder_date
           - user_id
           - phone_number
-        backend_only: false
   select_permissions:
     - role: user
       permission:
@@ -75,8 +95,8 @@
           user_id:
             _eq: X-Hasura-User-Id
 - table:
-    schema: public
     name: email_logs
+    schema: public
   insert_permissions:
     - role: user
       permission:
@@ -89,7 +109,6 @@
           - updated_at
           - id
           - roulette_type
-        backend_only: false
   select_permissions:
     - role: user
       permission:
@@ -103,12 +122,20 @@
           - id
         filter: {}
 - table:
-    schema: public
     name: gender
-  is_enum: true
-- table:
     schema: public
+  is_enum: true
+  array_relationships:
+    - name: users
+      using:
+        foreign_key_constraint_on:
+          column: gender
+          table:
+            name: users
+            schema: public
+- table:
     name: matched_users
+    schema: public
   object_relationships:
     - name: organization
       using:
@@ -125,7 +152,6 @@
           - created_at
           - updated_at
           - org_id
-        backend_only: false
   select_permissions:
     - role: user
       permission:
@@ -156,8 +182,8 @@
       permission:
         filter: {}
 - table:
-    schema: public
     name: meets
+    schema: public
   object_relationships:
     - name: connect
       using:
@@ -178,7 +204,6 @@
           - meet_date
           - location
           - follow_up_note
-        backend_only: false
   select_permissions:
     - role: user
       permission:
@@ -220,8 +245,8 @@
             user_id:
               _eq: X-Hasura-User-Id
 - table:
-    schema: public
     name: org_users
+    schema: public
   object_relationships:
     - name: organization
       using:
@@ -242,7 +267,6 @@
           - status
           - water_cooler
           - water_cooler_topics
-        backend_only: false
   select_permissions:
     - role: user
       permission:
@@ -276,8 +300,8 @@
       permission:
         filter: {}
 - table:
-    schema: public
     name: organizations
+    schema: public
   object_relationships:
     - name: roulette_frequency
       using:
@@ -286,13 +310,20 @@
       using:
         foreign_key_constraint_on: user_id
   array_relationships:
+    - name: matched_users
+      using:
+        foreign_key_constraint_on:
+          column: org_id
+          table:
+            name: matched_users
+            schema: public
     - name: org_users
       using:
         foreign_key_constraint_on:
           column: org_id
           table:
-            schema: public
             name: org_users
+            schema: public
   insert_permissions:
     - role: user
       permission:
@@ -320,7 +351,6 @@
           - water_cooler_time
           - water_cooler_timezone
           - water_cooler_topics
-        backend_only: false
   select_permissions:
     - role: user
       permission:
@@ -378,20 +408,74 @@
       permission:
         filter: {}
 - table:
+    name: post_likes
     schema: public
-    name: race
-  is_enum: true
+  object_relationships:
+    - name: post
+      using:
+        foreign_key_constraint_on: post_id
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
 - table:
+    name: posts
     schema: public
+  object_relationships:
+    - name: reposts
+      using:
+        foreign_key_constraint_on: reposted_from
+    - name: user
+      using:
+        foreign_key_constraint_on: author_id
+  array_relationships:
+    - name: author
+      using:
+        manual_configuration:
+          column_mapping:
+            author_id: user_id
+          insertion_order: null
+          remote_table:
+            name: users
+            schema: public
+    - name: comments
+      using:
+        foreign_key_constraint_on:
+          column: post_id
+          table:
+            name: comments
+            schema: public
+    - name: likes
+      using:
+        manual_configuration:
+          column_mapping:
+            id: post_id
+          insertion_order: null
+          remote_table:
+            name: post_likes
+            schema: public
+- table:
+    name: race
+    schema: public
+  is_enum: true
+  array_relationships:
+    - name: users
+      using:
+        foreign_key_constraint_on:
+          column: race
+          table:
+            name: users
+            schema: public
+- table:
     name: roulette_frequency
+    schema: public
   array_relationships:
     - name: organizations
       using:
         foreign_key_constraint_on:
           column: rf_id
           table:
-            schema: public
             name: organizations
+            schema: public
   select_permissions:
     - role: user
       permission:
@@ -401,100 +485,126 @@
           - rf_id
         filter: {}
 - table:
-    schema: public
     name: users
+    schema: public
+  object_relationships:
+    - name: genderByGender
+      using:
+        foreign_key_constraint_on: gender
+    - name: raceByRace
+      using:
+        foreign_key_constraint_on: race
   array_relationships:
     - name: connects
       using:
         foreign_key_constraint_on:
           column: user_id
           table:
-            schema: public
             name: connects
+            schema: public
     - name: joined_orgs
       using:
         foreign_key_constraint_on:
           column: user_id
           table:
-            schema: public
             name: org_users
+            schema: public
+    - name: liked_posts
+      using:
+        manual_configuration:
+          column_mapping:
+            user_id: user_id
+          insertion_order: null
+          remote_table:
+            name: post_likes
+            schema: public
     - name: organizations
       using:
         foreign_key_constraint_on:
           column: user_id
           table:
-            schema: public
             name: organizations
+            schema: public
+    - name: posts
+      using:
+        manual_configuration:
+          column_mapping:
+            user_id: author_id
+          insertion_order: null
+          remote_table:
+            name: posts
+            schema: public
   insert_permissions:
     - role: user
       permission:
         check: {}
         columns:
-          - user_id
+          - auth_provider
+          - birth_year
+          - city
+          - company_name
+          - country
+          - created_at
+          - department
           - email
           - first_name
-          - last_name
-          - company_name
-          - password
-          - created_at
-          - updated_at
-          - last_logged_on
-          - password_updated_on
-          - phone_number
+          - gender
+          - instagram_link
           - invite_code
           - invited_by
-          - gender
-          - birth_year
-          - race
-          - city
-          - state
-          - country
           - job_title
-          - department
-          - roulette_optin
-          - auth_provider
-          - water_cooler_topics
-          - prefer_way_of_contact
-          - prefer_day_and_time
+          - last_logged_on
+          - last_name
           - linkedin_link
-          - youtube_link
+          - password
+          - password_updated_on
+          - phone_number
+          - prefer_day_and_time
+          - prefer_way_of_contact
+          - profile_image
+          - race
+          - roulette_optin
+          - state
+          - updated_at
+          - user_id
+          - water_cooler_topics
           - website_link
-          - instagram_link
-        backend_only: false
+          - youtube_link
   select_permissions:
     - role: user
       permission:
         columns:
-          - roulette_optin
-          - birth_year
-          - water_cooler_topics
           - auth_provider
+          - birth_year
           - city
           - company_name
           - country
+          - created_at
           - department
           - email
           - first_name
           - gender
           - instagram_link
           - invite_code
+          - invited_by
           - job_title
+          - last_logged_on
           - last_name
           - linkedin_link
           - password
+          - password_updated_on
           - phone_number
           - prefer_day_and_time
           - prefer_way_of_contact
+          - profile_image
           - race
+          - roulette_optin
           - state
+          - updated_at
+          - user_id
+          - water_cooler_topics
           - website_link
           - youtube_link
-          - created_at
-          - last_logged_on
-          - password_updated_on
-          - updated_at
-          - invited_by
-          - user_id
         filter: {}
         limit: 1
         allow_aggregations: true
@@ -502,43 +612,44 @@
     - role: user
       permission:
         columns:
-          - roulette_optin
-          - birth_year
-          - water_cooler_topics
           - auth_provider
+          - birth_year
           - city
           - company_name
           - country
+          - created_at
           - department
           - email
           - first_name
           - gender
           - instagram_link
           - invite_code
+          - invited_by
           - job_title
+          - last_logged_on
           - last_name
           - linkedin_link
           - password
+          - password_updated_on
           - phone_number
           - prefer_day_and_time
           - prefer_way_of_contact
+          - profile_image
           - race
+          - roulette_optin
           - state
+          - updated_at
+          - user_id
+          - water_cooler_topics
           - website_link
           - youtube_link
-          - created_at
-          - last_logged_on
-          - password_updated_on
-          - updated_at
-          - invited_by
-          - user_id
         filter:
           user_id:
             _eq: X-Hasura-User-Id
         check: null
 - table:
-    schema: public
     name: water_cooler_users_hash
+    schema: public
   insert_permissions:
     - role: user
       permission:
@@ -549,7 +660,6 @@
           - id
           - org_id
           - updated_at
-        backend_only: false
   select_permissions:
     - role: user
       permission:
