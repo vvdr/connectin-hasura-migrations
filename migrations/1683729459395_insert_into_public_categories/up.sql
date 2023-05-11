@@ -1,0 +1,1 @@
+INSERT INTO "public"."categories"("name", "prompt", "id", "parent_id") VALUES (E'Sports and Performance coaching', E'Visualize a scene showing a coach guiding an athlete, symbolizing Sports and Performance coaching.', E'41d1432a-12d1-4609-87ec-08832721e5bf', null);

@@ -1,0 +1,1 @@
+INSERT INTO "public"."categories"("name", "prompt", "id", "parent_id") VALUES (E'Moonlighting or Freelancing', E'Create a dynamic image illustrating the concept of Moonlighting or Freelancing with flexibility and freedom.', E'65ab8eb4-be35-4621-892e-0f8d67de4928', null);

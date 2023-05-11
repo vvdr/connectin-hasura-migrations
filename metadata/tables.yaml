@@ -1,4 +1,10 @@
 - table:
+    name: categories
+    schema: public
+- table:
+    name: category_images
+    schema: public
+- table:
     name: comments
     schema: public
   object_relationships:
@@ -132,6 +138,24 @@
           column: gender
           table:
             name: users
+            schema: public
+- table:
+    name: hashtags
+    schema: public
+  array_relationships:
+    - name: post_hashtags
+      using:
+        foreign_key_constraint_on:
+          column: hashtag_id
+          table:
+            name: post_hashtags
+            schema: public
+    - name: user_hashtags
+      using:
+        foreign_key_constraint_on:
+          column: hashtag_id
+          table:
+            name: user_hashtags
             schema: public
 - table:
     name: matched_users
@@ -408,6 +432,16 @@
       permission:
         filter: {}
 - table:
+    name: post_hashtags
+    schema: public
+  object_relationships:
+    - name: hashtag
+      using:
+        foreign_key_constraint_on: hashtag_id
+    - name: post
+      using:
+        foreign_key_constraint_on: post_id
+- table:
     name: post_likes
     schema: public
   object_relationships:
@@ -417,6 +451,16 @@
     - name: user
       using:
         foreign_key_constraint_on: user_id
+- table:
+    name: post_reactions
+    schema: public
+  object_relationships:
+    - name: post
+      using:
+        foreign_key_constraint_on: post_id
+    - name: reaction
+      using:
+        foreign_key_constraint_on: reaction_id
 - table:
     name: posts
     schema: public
@@ -453,6 +497,23 @@
           remote_table:
             name: post_likes
             schema: public
+    - name: post_hashtags
+      using:
+        foreign_key_constraint_on:
+          column: post_id
+          table:
+            name: post_hashtags
+            schema: public
+    - name: post_reactions
+      using:
+        foreign_key_constraint_on:
+          column: post_id
+          table:
+            name: post_reactions
+            schema: public
+- table:
+    name: quotes
+    schema: public
 - table:
     name: race
     schema: public
@@ -465,6 +526,9 @@
           table:
             name: users
             schema: public
+- table:
+    name: reactions
+    schema: public
 - table:
     name: roulette_frequency
     schema: public
@@ -484,6 +548,16 @@
           - name
           - rf_id
         filter: {}
+- table:
+    name: user_hashtags
+    schema: public
+  object_relationships:
+    - name: hashtag
+      using:
+        foreign_key_constraint_on: hashtag_id
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
 - table:
     name: users
     schema: public
@@ -539,72 +613,80 @@
       permission:
         check: {}
         columns:
-          - auth_provider
-          - birth_year
-          - city
-          - company_name
-          - country
-          - created_at
-          - department
+          - user_id
           - email
           - first_name
-          - gender
-          - instagram_link
-          - invite_code
-          - invited_by
-          - job_title
-          - last_logged_on
           - last_name
-          - linkedin_link
+          - company_name
           - password
+          - created_at
+          - updated_at
+          - last_logged_on
           - password_updated_on
           - phone_number
-          - prefer_day_and_time
-          - prefer_way_of_contact
-          - profile_image
+          - invite_code
+          - invited_by
+          - gender
+          - birth_year
           - race
-          - roulette_optin
+          - city
           - state
-          - updated_at
-          - user_id
+          - country
+          - job_title
+          - department
+          - roulette_optin
+          - auth_provider
           - water_cooler_topics
-          - website_link
+          - prefer_way_of_contact
+          - prefer_day_and_time
+          - linkedin_link
           - youtube_link
+          - website_link
+          - instagram_link
+          - profile_image
+          - current_job_title
+          - next_job_title
+          - fields_of_interest
+          - specialization
   select_permissions:
     - role: user
       permission:
         columns:
-          - auth_provider
+          - roulette_optin
           - birth_year
+          - water_cooler_topics
+          - auth_provider
           - city
           - company_name
           - country
-          - created_at
+          - current_job_title
           - department
           - email
+          - fields_of_interest
           - first_name
           - gender
           - instagram_link
           - invite_code
-          - invited_by
           - job_title
-          - last_logged_on
           - last_name
           - linkedin_link
+          - next_job_title
           - password
-          - password_updated_on
           - phone_number
           - prefer_day_and_time
           - prefer_way_of_contact
           - profile_image
           - race
-          - roulette_optin
+          - specialization
           - state
-          - updated_at
-          - user_id
-          - water_cooler_topics
           - website_link
           - youtube_link
+          - created_at
+          - last_logged_on
+          - password_updated_on
+          - updated_at
+          - invited_by
+          - user_id
         filter: {}
         limit: 1
         allow_aggregations: true
@@ -612,37 +694,41 @@
     - role: user
       permission:
         columns:
-          - auth_provider
+          - roulette_optin
           - birth_year
+          - water_cooler_topics
+          - auth_provider
           - city
           - company_name
           - country
-          - created_at
+          - current_job_title
           - department
           - email
+          - fields_of_interest
           - first_name
           - gender
           - instagram_link
           - invite_code
-          - invited_by
           - job_title
-          - last_logged_on
           - last_name
           - linkedin_link
+          - next_job_title
           - password
-          - password_updated_on
           - phone_number
           - prefer_day_and_time
           - prefer_way_of_contact
           - profile_image
           - race
-          - roulette_optin
+          - specialization
           - state
-          - updated_at
-          - user_id
-          - water_cooler_topics
           - website_link
           - youtube_link
+          - created_at
+          - last_logged_on
+          - password_updated_on
+          - updated_at
+          - invited_by
+          - user_id
         filter:
           user_id:
             _eq: X-Hasura-User-Id

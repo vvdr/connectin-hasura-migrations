@@ -1,0 +1,1 @@
+INSERT INTO "public"."categories"("name", "prompt", "id", "parent_id") VALUES (E'Leadership', E'Create an inspiring and symbolic representation of Leadership in a corporate setting.', E'e4120da1-c9f6-4886-96e2-d9060cfd6195', null);

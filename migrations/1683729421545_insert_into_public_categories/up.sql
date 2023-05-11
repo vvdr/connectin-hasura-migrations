@@ -1,0 +1,1 @@
+INSERT INTO "public"."categories"("name", "prompt", "id", "parent_id") VALUES (E'Hybrid workplace and Productivity', E'Depict a modern hybrid workplace where employees are efficiently balancing work from home and office, maintaining high productivity.', E'8b8e3178-96e4-4b37-a8df-844b30c8cb27', null);

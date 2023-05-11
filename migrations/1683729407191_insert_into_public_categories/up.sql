@@ -1,0 +1,1 @@
+INSERT INTO "public"."categories"("name", "prompt", "id", "parent_id") VALUES (E'Workplace relationships and Health', E'Illustrate a harmonious workplace where employees are maintaining healthy relationships and prioritizing their well-being.', E'f8a9becd-d8d5-46a8-a646-f13ba75b9351', null);

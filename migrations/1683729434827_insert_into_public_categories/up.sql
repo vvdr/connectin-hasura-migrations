@@ -1,0 +1,1 @@
+INSERT INTO "public"."categories"("name", "prompt", "id", "parent_id") VALUES (E'Learning and Education', E'Generate a compelling image representing the power of Learning and Education in shaping minds', E'a0ba35f5-6f78-4627-8f40-317c6cc05a98', null);
