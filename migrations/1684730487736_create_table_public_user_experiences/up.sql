@@ -1,0 +1,2 @@
+CREATE TABLE "public"."user_experiences" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "role" text NOT NULL, "type" text NOT NULL, "description" text NOT NULL, "start_date" timestamptz NOT NULL, "end_date" timestamptz, "company_name" text NOT NULL, "company_logo" text NOT NULL, "user_id" uuid NOT NULL, PRIMARY KEY ("id") );COMMENT ON TABLE "public"."user_experiences" IS E'to save user experiences';
+CREATE EXTENSION IF NOT EXISTS pgcrypto;

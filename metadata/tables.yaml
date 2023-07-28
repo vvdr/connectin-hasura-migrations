@@ -1,9 +1,104 @@
 - table:
+    name: User_chat
+    schema: public
+- table:
     name: categories
     schema: public
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - name
+          - prompt
+          - id
+          - parent_id
+        filter: {}
 - table:
     name: category_images
     schema: public
+- table:
+    name: chat_group
+    schema: public
+  array_relationships:
+    - name: members
+      using:
+        manual_configuration:
+          column_mapping:
+            id: group_id
+          insertion_order: null
+          remote_table:
+            name: group_members
+            schema: public
+  insert_permissions:
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - created_at
+          - id
+          - updated_at
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - created_at
+          - id
+          - updated_at
+        filter: {}
+  update_permissions:
+    - role: user
+      permission:
+        columns:
+          - created_at
+          - id
+          - name
+          - updated_at
+          - user_id
+        filter: {}
+        check: null
+- table:
+    name: chat_messages
+    schema: public
+  insert_permissions:
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - chat_id
+          - content
+          - id
+          - image
+          - name
+          - owner_id
+          - profile_image
+          - timestamp
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - chat_id
+          - content
+          - id
+          - image
+          - name
+          - owner_id
+          - profile_image
+          - timestamp
+        filter: {}
+  update_permissions:
+    - role: user
+      permission:
+        columns:
+          - chat_id
+          - content
+          - id
+          - image
+          - name
+          - owner_id
+          - profile_image
+          - timestamp
+        filter: {}
+        check: null
 - table:
     name: comments
     schema: public
@@ -128,6 +223,52 @@
           - id
         filter: {}
 - table:
+    name: followed_users
+    schema: public
+  object_relationships:
+    - name: followed_user
+      using:
+        foreign_key_constraint_on: followed_user_id
+    - name: following_user
+      using:
+        foreign_key_constraint_on: user_id
+- table:
+    name: friendlist
+    schema: public
+  object_relationships:
+    - name: user_friend
+      using:
+        foreign_key_constraint_on: friend_id
+    - name: user_self
+      using:
+        foreign_key_constraint_on: user_id
+  insert_permissions:
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - status
+          - strength_friend
+          - strength_user
+          - created_at
+          - updated_at
+          - friend_id
+          - id
+          - user_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - status
+          - strength_friend
+          - strength_user
+          - created_at
+          - updated_at
+          - friend_id
+          - id
+          - user_id
+        filter: {}
+- table:
     name: gender
     schema: public
   is_enum: true
@@ -139,6 +280,22 @@
           table:
             name: users
             schema: public
+- table:
+    name: group_members
+    schema: public
+  object_relationships:
+    - name: group_detail
+      using:
+        manual_configuration:
+          column_mapping:
+            group_id: id
+          insertion_order: null
+          remote_table:
+            name: chat_group
+            schema: public
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
 - table:
     name: hashtags
     schema: public
@@ -268,6 +425,25 @@
           connect:
             user_id:
               _eq: X-Hasura-User-Id
+- table:
+    name: notifications
+    schema: public
+  object_relationships:
+    - name: friend_request_detail
+      using:
+        foreign_key_constraint_on: friend_request
+    - name: post
+      using:
+        foreign_key_constraint_on: post_id
+    - name: reaction_detail
+      using:
+        foreign_key_constraint_on: reaction_id
+    - name: user
+      using:
+        foreign_key_constraint_on: sender_id
+    - name: userByReceiverId
+      using:
+        foreign_key_constraint_on: receiver_id
 - table:
     name: org_users
     schema: public
@@ -549,6 +725,9 @@
           - rf_id
         filter: {}
 - table:
+    name: user_experiences
+    schema: public
+- table:
     name: user_hashtags
     schema: public
   object_relationships:
@@ -558,6 +737,9 @@
     - name: user
       using:
         foreign_key_constraint_on: user_id
+- table:
+    name: user_interests
+    schema: public
 - table:
     name: users
     schema: public
@@ -575,6 +757,27 @@
           column: user_id
           table:
             name: connects
+            schema: public
+    - name: followed_users
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: followed_users
+            schema: public
+    - name: friendlists
+      using:
+        foreign_key_constraint_on:
+          column: friend_id
+          table:
+            name: friendlist
+            schema: public
+    - name: friendlistsByUserId
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: friendlist
             schema: public
     - name: joined_orgs
       using:
@@ -607,6 +810,20 @@
           insertion_order: null
           remote_table:
             name: posts
+            schema: public
+    - name: user_experiences
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: user_experiences
+            schema: public
+    - name: user_interests
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: user_interests
             schema: public
   insert_permissions:
     - role: user
@@ -648,45 +865,49 @@
           - next_job_title
           - fields_of_interest
           - specialization
+          - about
+          - cover_image
   select_permissions:
     - role: user
       permission:
         columns:
-          - roulette_optin
-          - birth_year
-          - water_cooler_topics
-          - auth_provider
-          - city
-          - company_name
-          - country
-          - current_job_title
-          - department
+          - user_id
           - email
-          - fields_of_interest
           - first_name
-          - gender
-          - instagram_link
-          - invite_code
-          - job_title
           - last_name
-          - linkedin_link
-          - next_job_title
+          - company_name
           - password
-          - phone_number
-          - prefer_day_and_time
-          - prefer_way_of_contact
-          - profile_image
-          - race
-          - specialization
-          - state
-          - website_link
-          - youtube_link
           - created_at
+          - updated_at
           - last_logged_on
           - password_updated_on
-          - updated_at
+          - phone_number
+          - invite_code
           - invited_by
-          - user_id
+          - gender
+          - birth_year
+          - race
+          - city
+          - state
+          - country
+          - job_title
+          - department
+          - roulette_optin
+          - auth_provider
+          - water_cooler_topics
+          - prefer_way_of_contact
+          - prefer_day_and_time
+          - linkedin_link
+          - youtube_link
+          - website_link
+          - instagram_link
+          - profile_image
+          - current_job_title
+          - next_job_title
+          - fields_of_interest
+          - specialization
+          - about
+          - cover_image
         filter: {}
         limit: 1
         allow_aggregations: true
