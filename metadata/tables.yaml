@@ -281,6 +281,41 @@
             name: users
             schema: public
 - table:
+    name: gig_review
+    schema: public
+- table:
+    name: gig_skills
+    schema: public
+- table:
+    name: gigs
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+  array_relationships:
+    - name: gig_reviews
+      using:
+        foreign_key_constraint_on:
+          column: gig_id
+          table:
+            name: gig_review
+            schema: public
+    - name: gig_skills
+      using:
+        foreign_key_constraint_on:
+          column: gig_id
+          table:
+            name: gig_skills
+            schema: public
+    - name: price_tiers
+      using:
+        foreign_key_constraint_on:
+          column: gig_id
+          table:
+            name: price_tiers
+            schema: public
+- table:
     name: group_members
     schema: public
   object_relationships:
@@ -686,6 +721,20 @@
           column: post_id
           table:
             name: post_reactions
+            schema: public
+- table:
+    name: price_tier_service
+    schema: public
+- table:
+    name: price_tiers
+    schema: public
+  array_relationships:
+    - name: price_tier_services
+      using:
+        foreign_key_constraint_on:
+          column: price_tier_id
+          table:
+            name: price_tier_service
             schema: public
 - table:
     name: quotes
