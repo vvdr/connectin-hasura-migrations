@@ -1,6 +1,60 @@
 - table:
     name: User_chat
     schema: public
+  object_relationships:
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
+  insert_permissions:
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - is_admin
+          - type
+          - created_at
+          - updated_at
+          - id
+          - job_id
+          - recipient_id
+          - sender_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - is_admin
+          - type
+          - created_at
+          - updated_at
+          - id
+          - job_id
+          - recipient_id
+          - sender_id
+        filter: {}
+  update_permissions:
+    - role: user
+      permission:
+        columns:
+          - is_admin
+          - type
+          - created_at
+          - updated_at
+          - id
+          - job_id
+          - recipient_id
+          - sender_id
+        filter: {}
+        check: null
+- table:
+    name: admin_complains
+    schema: public
+  object_relationships:
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
+    - name: user
+      using:
+        foreign_key_constraint_on: submit_by
 - table:
     name: categories
     schema: public
@@ -59,44 +113,63 @@
 - table:
     name: chat_messages
     schema: public
+  object_relationships:
+    - name: order_offer
+      using:
+        foreign_key_constraint_on: offer_id
   insert_permissions:
     - role: user
       permission:
         check: {}
         columns:
-          - chat_id
-          - content
           - id
-          - image
-          - name
+          - chat_id
           - owner_id
-          - profile_image
+          - content
+          - image
           - timestamp
+          - name
+          - profile_image
+          - is_read
+          - recipient_id
+          - offer_id
+          - type
+          - is_admin
   select_permissions:
     - role: user
       permission:
         columns:
-          - chat_id
-          - content
           - id
-          - image
-          - name
+          - chat_id
           - owner_id
-          - profile_image
+          - content
+          - image
           - timestamp
+          - name
+          - profile_image
+          - is_read
+          - recipient_id
+          - offer_id
+          - type
+          - is_admin
         filter: {}
   update_permissions:
     - role: user
       permission:
         columns:
-          - chat_id
+          - is_admin
+          - is_read
           - content
-          - id
           - image
           - name
-          - owner_id
           - profile_image
+          - type
           - timestamp
+          - chat_id
+          - id
+          - offer_id
+          - owner_id
+          - recipient_id
         filter: {}
         check: null
 - table:
@@ -195,6 +268,19 @@
         filter:
           user_id:
             _eq: X-Hasura-User-Id
+- table:
+    name: contact_queries
+    schema: public
+- table:
+    name: contracts
+    schema: public
+  object_relationships:
+    - name: client_user
+      using:
+        foreign_key_constraint_on: client_id
+    - name: contractee_user
+      using:
+        foreign_key_constraint_on: user_id
 - table:
     name: email_logs
     schema: public
@@ -350,6 +436,82 @@
             name: user_hashtags
             schema: public
 - table:
+    name: hourly_contract_hours
+    schema: public
+- table:
+    name: invoice_table
+    schema: public
+  object_relationships:
+    - name: job
+      using:
+        foreign_key_constraint_on: job_id
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+- table:
+    name: job_cancel_request
+    schema: public
+  object_relationships:
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
+    - name: user
+      using:
+        foreign_key_constraint_on: submit_by
+- table:
+    name: job_listing
+    schema: public
+  object_relationships:
+    - name: gig
+      using:
+        foreign_key_constraint_on: gig_id
+    - name: hired_user
+      using:
+        foreign_key_constraint_on: hired
+    - name: posted_user
+      using:
+        foreign_key_constraint_on: posted_by
+  array_relationships:
+    - name: hourly_contract_hours
+      using:
+        foreign_key_constraint_on:
+          column: job_id
+          table:
+            name: hourly_contract_hours
+            schema: public
+    - name: job_invoices
+      using:
+        foreign_key_constraint_on:
+          column: job_id
+          table:
+            name: invoice_table
+            schema: public
+    - name: job_listing_proposals
+      using:
+        foreign_key_constraint_on:
+          column: job_id
+          table:
+            name: job_listing_proposals
+            schema: public
+    - name: order_offers
+      using:
+        foreign_key_constraint_on:
+          column: job_id
+          table:
+            name: order_offers
+            schema: public
+- table:
+    name: job_listing_proposals
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+- table:
+    name: job_listing_status
+    schema: public
+  is_enum: true
+- table:
     name: matched_users
     schema: public
   object_relationships:
@@ -467,6 +629,9 @@
     - name: friend_request_detail
       using:
         foreign_key_constraint_on: friend_request
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
     - name: post
       using:
         foreign_key_constraint_on: post_id
@@ -479,6 +644,71 @@
     - name: userByReceiverId
       using:
         foreign_key_constraint_on: receiver_id
+- table:
+    name: order_offers
+    schema: public
+  object_relationships:
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
+    - name: offer_by_user
+      using:
+        foreign_key_constraint_on: offer_by
+    - name: offer_to_user
+      using:
+        foreign_key_constraint_on: offer_to
+  insert_permissions:
+    - role: user
+      permission:
+        check: {}
+        columns:
+          - id
+          - offer
+          - amount
+          - status
+          - due_date
+          - created_at
+          - updated_at
+          - job_id
+          - offer_to
+          - offer_by
+          - job_type
+          - proposal_id
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - id
+          - offer
+          - amount
+          - status
+          - due_date
+          - created_at
+          - updated_at
+          - job_id
+          - offer_to
+          - offer_by
+          - job_type
+          - proposal_id
+        filter: {}
+  update_permissions:
+    - role: user
+      permission:
+        columns:
+          - amount
+          - due_date
+          - job_type
+          - offer
+          - status
+          - created_at
+          - updated_at
+          - id
+          - job_id
+          - offer_by
+          - offer_to
+          - proposal_id
+        filter: {}
+        check: null
 - table:
     name: org_users
     schema: public
@@ -643,6 +873,15 @@
       permission:
         filter: {}
 - table:
+    name: otp_verifications
+    schema: public
+- table:
+    name: pages
+    schema: public
+- table:
+    name: past_work
+    schema: public
+- table:
     name: post_hashtags
     schema: public
   object_relationships:
@@ -737,6 +976,13 @@
             name: price_tier_service
             schema: public
 - table:
+    name: profile_verfication
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+- table:
     name: quotes
     schema: public
 - table:
@@ -774,6 +1020,9 @@
           - rf_id
         filter: {}
 - table:
+    name: user_banking_info
+    schema: public
+- table:
     name: user_experiences
     schema: public
 - table:
@@ -790,6 +1039,19 @@
     name: user_interests
     schema: public
 - table:
+    name: user_pending_balance
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+- table:
+    name: user_portfolio_page
+    schema: public
+- table:
+    name: user_skills
+    schema: public
+- table:
     name: users
     schema: public
   object_relationships:
@@ -799,6 +1061,15 @@
     - name: raceByRace
       using:
         foreign_key_constraint_on: race
+    - name: user_portfolio_data
+      using:
+        manual_configuration:
+          column_mapping:
+            user_id: user_id
+          insertion_order: null
+          remote_table:
+            name: user_portfolio_page
+            schema: public
   array_relationships:
     - name: connects
       using:
@@ -806,6 +1077,13 @@
           column: user_id
           table:
             name: connects
+            schema: public
+    - name: contracts
+      using:
+        foreign_key_constraint_on:
+          column: client_id
+          table:
+            name: contracts
             schema: public
     - name: followed_users
       using:
@@ -827,6 +1105,41 @@
           column: user_id
           table:
             name: friendlist
+            schema: public
+    - name: gig_reviews
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: gig_review
+            schema: public
+    - name: gigs
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: gigs
+            schema: public
+    - name: job_listings_hired
+      using:
+        foreign_key_constraint_on:
+          column: hired
+          table:
+            name: job_listing
+            schema: public
+    - name: job_listings_posted
+      using:
+        foreign_key_constraint_on:
+          column: posted_by
+          table:
+            name: job_listing
+            schema: public
+    - name: jobs
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: contracts
             schema: public
     - name: joined_orgs
       using:
@@ -851,6 +1164,13 @@
           table:
             name: organizations
             schema: public
+    - name: past_works
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: past_work
+            schema: public
     - name: posts
       using:
         manual_configuration:
@@ -873,6 +1193,20 @@
           column: user_id
           table:
             name: user_interests
+            schema: public
+    - name: user_sales
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: invoice_table
+            schema: public
+    - name: user_skills
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: user_skills
             schema: public
   insert_permissions:
     - role: user
@@ -1026,3 +1360,16 @@
           - org_id
           - updated_at
         filter: {}
+- table:
+    name: website_settings
+    schema: public
+- table:
+    name: withdrawal_requests
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+    - name: user_banking_info
+      using:
+        foreign_key_constraint_on: withdrawal_method_id
