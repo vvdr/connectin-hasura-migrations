@@ -5,6 +5,14 @@
     - name: job_listing
       using:
         foreign_key_constraint_on: job_id
+  array_relationships:
+    - name: chat_messages
+      using:
+        foreign_key_constraint_on:
+          column: chat_id
+          table:
+            name: chat_messages
+            schema: public
   insert_permissions:
     - role: user
       permission:
@@ -493,6 +501,13 @@
           table:
             name: job_listing_proposals
             schema: public
+    - name: job_revisions
+      using:
+        foreign_key_constraint_on:
+          column: job_id
+          table:
+            name: job_revisions
+            schema: public
     - name: order_offers
       using:
         foreign_key_constraint_on:
@@ -511,6 +526,9 @@
     name: job_listing_status
     schema: public
   is_enum: true
+- table:
+    name: job_revisions
+    schema: public
 - table:
     name: matched_users
     schema: public
