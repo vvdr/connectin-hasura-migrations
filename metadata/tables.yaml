@@ -64,6 +64,9 @@
       using:
         foreign_key_constraint_on: submit_by
 - table:
+    name: admin_dashboard_refresh
+    schema: public
+- table:
     name: categories
     schema: public
   select_permissions:
@@ -501,6 +504,13 @@
           table:
             name: job_listing_proposals
             schema: public
+    - name: job_listing_tags
+      using:
+        foreign_key_constraint_on:
+          column: job_listing_id
+          table:
+            name: job_listing_tags
+            schema: public
     - name: job_revisions
       using:
         foreign_key_constraint_on:
@@ -523,9 +533,19 @@
       using:
         foreign_key_constraint_on: user_id
 - table:
+    name: job_listing_recommendation_bot
+    schema: public
+  object_relationships:
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
+- table:
     name: job_listing_status
     schema: public
   is_enum: true
+- table:
+    name: job_listing_tags
+    schema: public
 - table:
     name: job_revisions
     schema: public
@@ -1001,6 +1021,17 @@
       using:
         foreign_key_constraint_on: user_id
 - table:
+    name: promo_table
+    schema: public
+  array_relationships:
+    - name: active_users
+      using:
+        foreign_key_constraint_on:
+          column: promo_code_id
+          table:
+            name: user_promo_code
+            schema: public
+- table:
     name: quotes
     schema: public
 - table:
@@ -1038,6 +1069,13 @@
           - rf_id
         filter: {}
 - table:
+    name: transactions_history
+    schema: public
+  object_relationships:
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
+- table:
     name: user_banking_info
     schema: public
 - table:
@@ -1060,12 +1098,25 @@
     name: user_pending_balance
     schema: public
   object_relationships:
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
     - name: user
       using:
         foreign_key_constraint_on: user_id
 - table:
     name: user_portfolio_page
     schema: public
+- table:
+    name: user_promo_code
+    schema: public
+  object_relationships:
+    - name: promo_code
+      using:
+        foreign_key_constraint_on: promo_code_id
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
 - table:
     name: user_skills
     schema: public

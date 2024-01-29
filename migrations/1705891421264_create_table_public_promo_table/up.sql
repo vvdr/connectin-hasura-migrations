@@ -1,0 +1,2 @@
+CREATE TABLE "public"."promo_table" ("id" uuid NOT NULL DEFAULT gen_random_uuid(), "code" text NOT NULL, "start_date" timestamptz NOT NULL, "end_date" timestamptz NOT NULL, "is_buyer_code" boolean NOT NULL, "is_seller_code" boolean NOT NULL, "discount_percentage" numeric NOT NULL, PRIMARY KEY ("id") );COMMENT ON TABLE "public"."promo_table" IS E'table for storing promo codes ';
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
