@@ -511,6 +511,13 @@
           table:
             name: job_listing_tags
             schema: public
+    - name: job_rating_reviews
+      using:
+        foreign_key_constraint_on:
+          column: job_id
+          table:
+            name: job_rating_reviews
+            schema: public
     - name: job_revisions
       using:
         foreign_key_constraint_on:
@@ -546,6 +553,19 @@
 - table:
     name: job_listing_tags
     schema: public
+- table:
+    name: job_rating_reviews
+    schema: public
+  object_relationships:
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
+    - name: user_buyer
+      using:
+        foreign_key_constraint_on: buyer_id
+    - name: user_seller
+      using:
+        foreign_key_constraint_on: seller_id
 - table:
     name: job_revisions
     schema: public
