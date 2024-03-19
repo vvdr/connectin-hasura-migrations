@@ -133,36 +133,48 @@
       permission:
         check: {}
         columns:
-          - id
-          - chat_id
-          - owner_id
+          - is_admin
+          - is_read
+          - attachment_size
+          - attachment
+          - attachment_name
+          - attachment_type
           - content
           - image
-          - timestamp
           - name
           - profile_image
-          - is_read
-          - recipient_id
-          - offer_id
           - type
-          - is_admin
+          - created_at
+          - timestamp
+          - updated_at
+          - chat_id
+          - id
+          - offer_id
+          - owner_id
+          - recipient_id
   select_permissions:
     - role: user
       permission:
         columns:
-          - id
-          - chat_id
-          - owner_id
+          - is_admin
+          - is_read
+          - attachment_size
+          - attachment
+          - attachment_name
+          - attachment_type
           - content
           - image
-          - timestamp
           - name
           - profile_image
-          - is_read
-          - recipient_id
-          - offer_id
           - type
-          - is_admin
+          - created_at
+          - timestamp
+          - updated_at
+          - chat_id
+          - id
+          - offer_id
+          - owner_id
+          - recipient_id
         filter: {}
   update_permissions:
     - role: user
@@ -170,12 +182,18 @@
         columns:
           - is_admin
           - is_read
+          - attachment_size
+          - attachment
+          - attachment_name
+          - attachment_type
           - content
           - image
           - name
           - profile_image
           - type
+          - created_at
           - timestamp
+          - updated_at
           - chat_id
           - id
           - offer_id
@@ -319,6 +337,13 @@
           - updated_at
           - id
         filter: {}
+- table:
+    name: failed_transaction_record
+    schema: public
+  object_relationships:
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
 - table:
     name: followed_users
     schema: public
@@ -511,6 +536,13 @@
           table:
             name: job_listing_tags
             schema: public
+    - name: job_milestones
+      using:
+        foreign_key_constraint_on:
+          column: job_id
+          table:
+            name: job_milestones
+            schema: public
     - name: job_rating_reviews
       using:
         foreign_key_constraint_on:
@@ -532,6 +564,31 @@
           table:
             name: order_offers
             schema: public
+  select_permissions:
+    - role: user
+      permission:
+        columns:
+          - job_number
+          - is_paid
+          - fixed_price
+          - hourly_rate
+          - hourly_rate_max
+          - hourly_rate_min
+          - max_hour_week
+          - complexity
+          - description
+          - duration
+          - status
+          - stripe_payment_id
+          - title
+          - type
+          - created_at
+          - updated_at
+          - gig_id
+          - hired
+          - id
+          - posted_by
+        filter: {}
 - table:
     name: job_listing_proposals
     schema: public
@@ -539,6 +596,14 @@
     - name: user
       using:
         foreign_key_constraint_on: user_id
+  array_relationships:
+    - name: proposal_milestones
+      using:
+        foreign_key_constraint_on:
+          column: proposal_id
+          table:
+            name: proposal_milestone
+            schema: public
 - table:
     name: job_listing_recommendation_bot
     schema: public
@@ -553,6 +618,13 @@
 - table:
     name: job_listing_tags
     schema: public
+- table:
+    name: job_milestones
+    schema: public
+  object_relationships:
+    - name: job_listing
+      using:
+        foreign_key_constraint_on: job_id
 - table:
     name: job_rating_reviews
     schema: public
@@ -1052,6 +1124,9 @@
             name: user_promo_code
             schema: public
 - table:
+    name: proposal_milestone
+    schema: public
+- table:
     name: quotes
     schema: public
 - table:
@@ -1343,43 +1418,47 @@
     - role: user
       permission:
         columns:
-          - user_id
-          - email
-          - first_name
-          - last_name
+          - is_onboarding_complete
+          - payment_method_error
+          - roulette_optin
+          - birth_year
+          - water_cooler_topics
+          - about
+          - auth_provider
+          - city
           - company_name
+          - country
+          - cover_image
+          - current_job_title
+          - department
+          - email
+          - fields_of_interest
+          - first_name
+          - gender
+          - instagram_link
+          - invite_code
+          - job_title
+          - last_name
+          - linkedin_link
+          - next_job_title
           - password
+          - phone_number
+          - prefer_day_and_time
+          - prefer_way_of_contact
+          - profile_image
+          - race
+          - specialization
+          - state
+          - stripeAccountId
+          - stripeCustomerId
+          - website_link
+          - youtube_link
           - created_at
-          - updated_at
           - last_logged_on
           - password_updated_on
-          - phone_number
-          - invite_code
+          - updated_at
           - invited_by
-          - gender
-          - birth_year
-          - race
-          - city
-          - state
-          - country
-          - job_title
-          - department
-          - roulette_optin
-          - auth_provider
-          - water_cooler_topics
-          - prefer_way_of_contact
-          - prefer_day_and_time
-          - linkedin_link
-          - youtube_link
-          - website_link
-          - instagram_link
-          - profile_image
-          - current_job_title
-          - next_job_title
-          - fields_of_interest
-          - specialization
-          - about
-          - cover_image
+          - user_id
         filter: {}
         limit: 1
         allow_aggregations: true

@@ -1,5 +1,5 @@
 version: 2
-endpoint: https://aagekya-backend.herokuapp.com
+endpoint: https://aagekya-backend-stg.herokuapp.com
 metadata_directory: metadata
 actions:
   kind: synchronous
